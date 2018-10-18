@@ -18,8 +18,8 @@ $ node server.js
 - go to https://calvin-rest-api.herokuapp.com/ to see the landing page on Heroku.
 
 ## Further Improvements
-Some features I might add in the future to get me started.
+Some features I'd like to add in the future...
 - ~~A Landing Page~~
 - Ability to delete all objects.
 - Filtered objects on GET request.
-- Adapt this basic rest api to store movie data. See[project](https://github.com/evanhiroshige/Movie-Recommendations) I'm working on with a friend.
+- Adapt this API to query movie data. See this [project](https://github.com/evanhiroshige/Movie-Recommendations) I'm working on with a friend.
