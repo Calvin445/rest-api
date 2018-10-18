@@ -620,7 +620,7 @@
 									"}",
 									"",
 									"pm.test(\"Set _id error message\", function (){",
-									"    pm.expect(pm.response.json()).to.eql(msg)",
+									"    pm.expect(JSON.stringify(pm.response.json())).to.eql(JSON.stringify(msg))",
 									"})",
 									"",
 									""
@@ -641,7 +641,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"_id\" : \"this is a bad ID\"\n\t\"This\" : \"Is a test\"\n}"
+							"raw": "{\n\t\"_id\" : \"this is a bad ID\",\n\t\"This\" : \"Is a test\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}objects/",
