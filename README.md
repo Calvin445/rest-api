@@ -17,6 +17,11 @@ $ node server.js
 ## Heroku
 - go to https://calvin-rest-api.herokuapp.com/ to see the landing page on Heroku.
 
+## Testing
+- Import the collection tests/Rest API Test Collection.postman_collection.json into Postman
+- Set the environment appropriately (heroku or local)
+- Use the Collection Runner to run the requests
+
 ## Further Improvements
 Some features I'd like to add in the future...
 - ~~A Landing Page~~
