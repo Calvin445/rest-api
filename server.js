@@ -12,7 +12,9 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(process.env.MONGODB_URI || dbConfig.url, { useNewUrlParser: true })
+const database = dbConfig.heroku;
+
+mongoose.connect(database.url, { useNewUrlParser: true })
     .then(() => {
         console.log("Successfully connected to the database")
     }).catch(err => {
@@ -24,9 +26,22 @@ app.get('/', (req,res) => {
     res.json({"message": "Welcome."});
 });
 
+app.use((error, req, res, next) => {
+    if (error instanceof SyntaxError) {
+        return res.status(400).send({
+            verb : req.method,
+            url : req.protocol + "://" + req.get('host') + req.originalUrl,
+            message: "Malformed JSON Object"
+        });
+    }
+    else {
+        next();
+    }
+});
+
 require('./app/routes/routes.js')(app);
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log("Server is listening on port ", process.env.PORT);
+app.listen(database.port, () => {
+    console.log("Server is listening on port ", database.port);
 });
 
