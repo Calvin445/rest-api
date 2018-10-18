@@ -567,7 +567,7 @@
 									"    message : \"Malformed JSON Object\"",
 									"}",
 									"",
-									"pm.test(\"Content empty error message\", function (){",
+									"pm.test(\"Malformed error message\", function (){",
 									"    pm.expect(pm.response.json()).to.eql(msg)",
 									"})"
 								],
@@ -588,6 +588,60 @@
 						"body": {
 							"mode": "raw",
 							"raw": "Malformed JSON"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST BAD_ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9aee2c84-4767-4ac4-94ca-789277e36937",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"let msg = {",
+									"    verb : \"POST\",",
+									"    url : pm.environment.get(\"url\") + \"objects/\",",
+									"    message: \"Cannot create object with field '_id' set\"",
+									"}",
+									"",
+									"pm.test(\"Set _id error message\", function (){",
+									"    pm.expect(pm.response.json()).to.eql(msg)",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_id\" : \"this is a bad ID\"\n\t\"This\" : \"Is a test\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}objects/",
