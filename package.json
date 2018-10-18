@@ -1,5 +1,5 @@
 {
-  "name": "Basic REST",
+  "name": "calvin-rest-api",
   "version": "1.0.0",
   "description": "Basic REST API!",
   "main": "server.js",
