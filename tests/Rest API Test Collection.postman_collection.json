@@ -1,0 +1,869 @@
+{
+	"info": {
+		"_postman_id": "2c2a5a19-1820-4bfe-8ade-d956826c3322",
+		"name": "Rest API Test Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tests",
+			"item": [
+				{
+					"name": "POST OBJECT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf612ed0-49cc-4b29-a7d8-0b54fa51b6df",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Has correct fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.firstName).to.eql(\"Andrey\");",
+									"    pm.expect(jsonData.lastName).to.eql(\"Kolmogorov\");",
+									"    pm.expect(jsonData.dob).to.eql(\"25 April 1903\");",
+									"});",
+									"",
+									"pm.test(\"Has an _id\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.globals.set(\"obj1_id\", jsonData._id);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "239d96d3-4256-430a-9ce3-62d72cafc28c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\" : \"Andrey\",\n\t\"lastName\" : \"Kolmogorov\",\n\t\"dob\" : \"25 April 1903\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE OBJECT",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "87fac6e3-1324-47a2-ac24-c27300657a3a",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "6714f8dc-1d7f-4b3b-b430-176f8e5d4470",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Has correct fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.obj.key).to.eql(\"value\");",
+									"    pm.expect(jsonData.arr).to.eql([\"0\",\"1\",\"2\"]);",
+									"    pm.expect(jsonData.dob).to.eql(\"25 April 1903\");",
+									"});",
+									"",
+									"pm.test(\"Has an _id\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData._id).to.eql(pm.globals.get(\"obj1_id\"));",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_id\" : \"{{obj1_id}}\",\n    \"obj\" : {\n    \t\"key\" : \"value\"\n    },\n    \"arr\" : [\"0\", \"1\", \"2\"],\n    \"dob\" : \"25 April 1903\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj1_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj1_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE OBJECT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "61a7f699-db15-4206-9be4-6cf9d4625df5",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has correct fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.obj).to.eql({\"key\" : \"value\"});",
+									"    pm.expect(jsonData.arr).to.eql([\"0\",\"1\",\"2\"]);",
+									"    pm.expect(jsonData.dob).to.eql(\"25 April 1903\");",
+									"});",
+									"",
+									"pm.test(\"Has an _id\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData._id).to.eql(pm.globals.get(\"obj1_id\"));",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj1_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj1_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST OBJECT2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee715c79-e7cd-4c54-9f44-55e6890682de",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Has correct fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.firstName).to.eql(\"Andrey\");",
+									"    pm.expect(jsonData.lastName).to.eql(\"Kolmogorov\");",
+									"    pm.expect(jsonData.dob).to.eql(\"25 April 1903\");",
+									"});",
+									"",
+									"pm.test(\"Has an _id\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.globals.set(\"obj2_id\", jsonData._id);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\" : \"Andrey\",\n\t\"lastName\" : \"Kolmogorov\",\n\t\"dob\" : \"25 April 1903\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ALL OBJECTS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca919f0d-be6d-414f-bd71-c011a49fa513",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var obj  = {url:pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj1_id\")}",
+									"var obj2 = {url:pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj2_id\")}",
+									"",
+									"pm.test(\"Body contains objects\", function () {",
+									"    pm.expect(pm.response.text()).to.include(JSON.stringify(obj));",
+									"    pm.expect(pm.response.text()).to.include(JSON.stringify(obj2));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST OBJECT3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8435f871-7191-439a-ab2f-e9028bf7d335",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Has an _id\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.globals.set(\"obj3_id\", jsonData._id);",
+									"})",
+									"",
+									"pm.test(\"Has correct fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.eql({0: \"1\", 1: \"2\", 2: {key: \"value\"}, ",
+									"    _id: pm.globals.get(\"obj3_id\")});",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"1\", \"2\", {\"key\" : \"value\"}]"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE OBJECT2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2dd3bfb3-d664-4a3c-8058-204e3ee3daba",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}objects/{{obj2_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj2_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ALL OBJECTS Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca919f0d-be6d-414f-bd71-c011a49fa513",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var obj  = {url:pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj1_id\")}",
+									"var obj2 = {url:pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj2_id\")}",
+									"var obj3 = {url:pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj3_id\")}",
+									"",
+									"pm.test(\"Body contains obj\", function () {",
+									"    pm.expect(pm.response.text()).to.include(JSON.stringify(obj));",
+									"});",
+									"",
+									"pm.test(\"Body contains obj3\", function () {",
+									"    pm.expect(pm.response.text()).to.include(JSON.stringify(obj3));",
+									"});",
+									"",
+									"pm.test(\"Body does not contain obj2\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(JSON.stringify(obj2));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE OBJECT",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj1_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj1_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE OBJECT3",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj3_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj3_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ALL OBJECTS Copy Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca919f0d-be6d-414f-bd71-c011a49fa513",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"is empty\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.eql([]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Handling Tests",
+			"item": [
+				{
+					"name": "POST EMPTY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7c0a24aa-381d-443e-933f-13427b0911f5",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"let msg = {",
+									"    verb : \"POST\",",
+									"    url : pm.environment.get(\"url\") + \"objects/\",",
+									"    message : \"Content cannot be empty\"",
+									"}",
+									"",
+									"pm.test(\"Content empty error message\", function (){",
+									"    pm.expect(pm.response.json()).to.eql(msg)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[]"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST MALFORMED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fdd6e7b3-9f89-4876-862d-1ffb58b22793",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"let msg = {",
+									"    verb : \"POST\",",
+									"    url : pm.environment.get(\"url\") + \"objects/\",",
+									"    message : \"Malformed JSON Object\"",
+									"}",
+									"",
+									"pm.test(\"Content empty error message\", function (){",
+									"    pm.expect(pm.response.json()).to.eql(msg)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Malformed JSON"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST OBJ4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a2fb8812-0deb-4387-9d1d-09af18aea389",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Has correct fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.This).to.eql(\"Is a test\");",
+									"});",
+									"",
+									"pm.test(\"Has an _id\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.globals.set(\"obj4_id\", jsonData._id);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"This\" : \"Is a test\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT NO_ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a6db6f68-9ef2-4d42-94c6-7b906e99f913",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"let msg = {",
+									"    verb : \"PUT\",",
+									"    url : pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj4_id\"),",
+									"    message : \"Must include _id field for object\"",
+									"}",
+									"",
+									"pm.test(\"Missing _id error message\", function (){",
+									"    pm.expect(JSON.stringify(pm.response.json())).to.eql(JSON.stringify(msg))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"This\" : \"Is an updated test\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj4_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj4_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT WRONG_ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dbbdc63f-ea96-4bda-b10a-cd18f0d407a8",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"let msg = {",
+									"    verb : \"PUT\",",
+									"    url : pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj4_id\"),",
+									"    message : \"Cannot modify _id field for object\"",
+									"}",
+									"",
+									"pm.test(\"Missing _id error message\", function (){",
+									"    pm.expect(JSON.stringify(pm.response.json())).to.eql(JSON.stringify(msg))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_id\" : \"try to mix up the _id's!!!\",\n\t\"This\" : \"Is an updated test. Again\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj4_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj4_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT EMPTY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5f610489-c27d-41b2-bc3b-b5b2b4b4edbd",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"let msg = {",
+									"    verb : \"PUT\",",
+									"    url : pm.environment.get(\"url\") + \"objects/\" + pm.globals.get(\"obj4_id\"),",
+									"    message : \"Content cannot be empty\"",
+									"}",
+									"",
+									"pm.test(\"Content empty error message\", function (){",
+									"    pm.expect(pm.response.json()).to.eql(msg)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj4_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj4_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE OBJ4",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/{{obj4_id}}",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								"{{obj4_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ALL OBJECTS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca919f0d-be6d-414f-bd71-c011a49fa513",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"is empty\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.eql([]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}objects/",
+							"host": [
+								"{{url}}objects"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
