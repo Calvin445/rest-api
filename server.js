@@ -7,6 +7,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
+app.use(express.static("home_page"));
+
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
 
@@ -20,10 +22,6 @@ mongoose.connect(database.url, { useNewUrlParser: true })
     }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
-});
-
-app.get('/', (req,res) => {
-    res.json({"message": "Welcome."});
 });
 
 app.use((error, req, res, next) => {
