@@ -12,13 +12,13 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(dbConfig.url, { useNewUrlParser: true })
+mongoose.connect(process.env.MONGODB_URI || dbConfig.url, { useNewUrlParser: true })
     .then(() => {
         console.log("Successfully connected to the database")
     }).catch(err => {
-        console.log('Could not connect to the database. Exiting now...', err);
-        process.exit();
-    });
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
+});
 
 app.get('/', (req,res) => {
     res.json({"message": "Welcome."});
@@ -26,7 +26,8 @@ app.get('/', (req,res) => {
 
 require('./app/routes/routes.js')(app);
 
-app.listen(3000, () => {
-    console.log("Server is listening on port 3000");
+app.listen(process.env.PORT || 3000, () => {
+    let port = app.address().port;
+    console.log("Server is listening on port ", port);
 });
 
