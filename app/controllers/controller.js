@@ -1,5 +1,6 @@
 const Obj = require('../models/model.js');
 
+// Make sure request isn't empty.
 validateRequest = (req, res, next) => {
     if (JSON.stringify(req.body) === JSON.stringify({}) ||
         JSON.stringify(req.body) === JSON.stringify([])) {
@@ -8,15 +9,22 @@ validateRequest = (req, res, next) => {
             url : req.protocol + "://" + req.get('host') + req.originalUrl,
             message: "Content cannot be empty"
         });
-    }
-    else {
+    } else {
         next();
     }
 };
 
 // Create a new object save it to the database
+// Don't allow objects with a _id already set.
 exports.create = (req, res) => {
     validateRequest(req, res, () => {
+        if (req.body.hasOwnProperty('_id')) {
+            return res.status(400).send({
+                verb : req.method,
+                url : req.protocol + "://" + req.get('host') + req.originalUrl,
+                message: "Cannot create object with field '_id' set"
+            });
+        }
         const jObj = new Obj(req.body);
         jObj.save()
             .then(obj => {
@@ -29,6 +37,8 @@ exports.create = (req, res) => {
     });
 };
 
+// Update an existing object in the database
+// Don't allow objects without the correct corresponding _id as a field.
 exports.update = (req, res) => {
     validateRequest(req, res, () => {
         if (!req.body.hasOwnProperty('_id')) {
@@ -62,6 +72,7 @@ exports.update = (req, res) => {
     });
 };
 
+// Finds all the objects and returns their URLs
 exports.findAll = (req, res) => {
     Obj.find()
         .then(objects => {
@@ -78,10 +89,16 @@ exports.findAll = (req, res) => {
         });
 };
 
+// Find and return an object by its ID.
+// Sends an error if object cannot be found.
 exports.findOne = (req, res) => {
     Obj.findById(req.params.uid)
-        .then(objects => {
-            res.status(200).send(objects);
+        .then(obj => {
+            if(!obj) {
+                return res.status(404).send({
+                    message: "Could not find object with id " + req.params.uid });
+            }
+            res.status(200).send(obj);
         })
         .catch(err => {
             res.status(500).send({
@@ -89,6 +106,8 @@ exports.findOne = (req, res) => {
         });
 };
 
+// Find and delete an object by its ID.
+// Sends an error if object cannot be found.
 exports.delete = (req, res) => {
     Obj.findByIdAndDelete(req.params.uid)
         .then(obj => {
